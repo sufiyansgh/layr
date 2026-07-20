@@ -1,5 +1,13 @@
+import fs from "fs";
 import dotenv from "dotenv";
-dotenv.config();
+
+// If Render (or similar) provides a secret file, prefer it.
+// Secret files on Render are mounted at /etc/secrets/<filename>.
+if (fs.existsSync("/etc/secrets/openai.env")) {
+    dotenv.config({ path: "/etc/secrets/openai.env" });
+} else {
+    dotenv.config();
+}
 
 import express from "express";
 import OpenAI from "openai";
