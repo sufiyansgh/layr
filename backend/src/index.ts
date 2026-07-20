@@ -81,8 +81,20 @@ app.post("/chat", async (req, res) => {
     res.end();
 });
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+// Prefer the port provided by the host (Render sets `PORT`) and fallback to 3000 for local dev
+const PORT = process.env.PORT || 3000;
+
+// Health check endpoint for Render
+app.get("/healthz", (_req, res) => res.status(200).send("ok"));
+
+if (!process.env.OPENAI_API_KEY) {
+    console.warn(
+        "Warning: OPENAI_API_KEY is not set. The backend will not be able to call OpenAI without it.",
+    );
+}
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
 
 function createTemplateResponse(
