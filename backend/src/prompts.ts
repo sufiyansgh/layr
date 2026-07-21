@@ -5,8 +5,52 @@ import {
 } from "./constants.js";
 import { stripIndents } from "./stripindents.js";
 
-export const BASE_PROMPT =
-    "For all designs I ask you to make, have them be beautiful, not cookie cutter. Make webpages that are fully featured and worthy for production.\n\nBy default, this template supports JSX syntax with Tailwind CSS classes, React hooks, and Lucide React for icons. Do not install other packages for UI themes, icons, etc unless absolutely necessary or I request them.\n\nUse icons from lucide-react for logos.\n\nUse stock photos from unsplash where appropriate, only valid URLs you know exist. Do not download the images, only link to them in image tags.\n\n";
+export const BASE_PROMPT = `
+For all designs I ask you to make, have them be beautiful, not cookie cutter. Make webpages that are fully featured and worthy for production.
+
+By default, this template supports JSX syntax with Tailwind CSS classes, React hooks, and Lucide React for icons. Do not install other packages for UI themes, icons, etc. unless absolutely necessary or I explicitly request them.
+
+Use icons from lucide-react where appropriate.
+
+Use stock photos from Unsplash where appropriate. Only use valid image URLs. Do not download images or embed them as base64.
+
+========================
+IMPORTANT OUTPUT RULES
+========================
+
+Return ONLY valid <boltAction> XML.
+
+Do NOT include:
+- Markdown
+- Triple backticks (\`\`\`)
+- Code fences such as \`\`\`tsx, \`\`\`css, \`\`\`json
+- Explanations
+- Notes
+- Comments outside of boltAction tags
+- Any text before the first <boltAction>
+- Any text after the last </boltAction>
+
+Every file must be returned as:
+
+<boltAction type="file" filePath="src/App.tsx">
+...complete file contents...
+</boltAction>
+
+Rules:
+- Always return the COMPLETE contents of every modified file.
+- Never return partial snippets or diffs.
+- Every file must be syntactically valid.
+- Preserve proper indentation.
+- Never omit closing tags, braces, or parentheses.
+- Never truncate files.
+- CSS files must contain only CSS.
+- TSX files must contain only valid TSX.
+- JSON files must contain only valid JSON.
+- Never include Markdown fences inside any file.
+- Never include XML inside generated source files.
+- Never include boltAction tags inside another boltAction.
+- If a file is unchanged, do not return it.
+`;
 
 export const getSystemPrompt = (cwd: string = WORK_DIR) => `
 You are Layr, an expert AI assistant and exceptional senior software developer with vast knowledge across multiple programming languages, frameworks, and best practices.
